@@ -1,14 +1,23 @@
-import Home from './pages/Home.js';
+import React from 'react';
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import Home from './pages/Home';
 import './sass/App.scss';
+import SearchPage from './SearchPage';
 
 function App() {
   return (
+    // BEM
     <div className="App">
-      <h1>Google Clone</h1>
-
-      {/* Home */}
-      <Home/>
-      {/* SearchPage */}
+      <Router>
+        <Switch>
+          <Route path="/search">
+            <SearchPage/>
+          </Route>
+          <Route path="/">
+            <Home/>
+          </Route>
+        </Switch>
+      </Router>
     </div>
   );
 }
