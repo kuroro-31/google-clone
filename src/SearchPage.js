@@ -6,24 +6,17 @@ import RoomIcon from '@material-ui/icons/Room';
 import SearchIcon from '@material-ui/icons/Search';
 import React from 'react';
 import { Link } from 'react-router-dom';
-// import useGoogleSearch from './useGoogleSearch';
-import Response from './response';
 import Search from './Search';
 import { useStateValue } from './StateProvider';
+import useGoogleSearch from './useGoogleSearch';
 
 
-
-
-
-
-function Searchpage(props) {
+function Searchpage() {
   
   const [{ term }, dispath] = useStateValue();
-  // const { data } = useGoogleSearch(term);
+  const { data } = useGoogleSearch(term);
   
-  const data = Response;
-
-  console.log(data)
+  // console.log(data)
 
   return (
     <div className="searchPage">
@@ -52,44 +45,84 @@ function Searchpage(props) {
               </div>
               <div className="searchPage__option">
                 <DescriptionIcon />
-                <Link to="/all">News</Link>
+                <Link to="/news">News</Link>
               </div>
               <div className="searchPage__option">
                 <ImageIcon />
-                <Link to="/all">Images</Link>
+                <Link to="/images">Images</Link>
               </div>
               <div className="searchPage__option">
                 <LocalOfferIcon />
-                <Link to="/all">shopping</Link>
+                <Link to="/shopping">shopping</Link>
               </div>
               <div className="searchPage__option">
                 <RoomIcon />
-                <Link to="/all">maps</Link>
+                <Link to="/maps">maps</Link>
               </div>
               <div className="searchPage__option">
                 <MoreVertIcon />
-                <Link to="/all">more</Link>
+                <Link to="/more">more</Link>
               </div>
             </div>
 
             <div className="searchPage__optionsRight">
               <div className="searchPage__option">
-                <Link to="/all">Setting</Link>
+                <Link to="/setting">Setting</Link>
               </div>
               <div className="searchPage__option">
-                <Link to="/all">Tools</Link>
+                <Link to="/tools">Tools</Link>
               </div>
             </div>
           </div>
-          
 
         </div>
-
       </div>
 
-      <div className="searchPage__results">
-        
-      </div>
+      { true && (
+        <div className="searchPage__results">
+          
+          {/* 検索結果の件数表示 */}
+          <p className="searchPage__resultCount">
+            About 
+            { data?.searchInformation.formattedTotalResults }
+            results 
+            ({data?.searchInformation.formattedSearchTime} seconds)
+            for
+            {term}
+          </p>
+
+          {/* 検索結果一覧 */}
+          { data?.items.map(item => {
+              <div className="searchPage__result">
+                
+                <a href={item.link}>
+                  {
+                    item.pagemap?.cse_image?.length > 0 && item.pagemap?.cse_image[0]?.src && (
+                      <img
+                        className="searchPage__resultImage"
+                        src={ item.pagemap?.cse_image[0]?.src }
+                        alt="" />
+                  )}
+
+                  { item.displayLink } ▽
+                </a>
+                
+                <a
+                  className="searchPage__resultTitle"
+                  href={item.link}>
+                  <h2>{ item.title }</h2>
+                </a>
+
+                <p className="searchPage__resultSnippet">
+                  { item.snippet }
+                </p>
+              
+              </div>
+            })
+            
+          }
+        </div>
+      )}
       
     </div>
   )
